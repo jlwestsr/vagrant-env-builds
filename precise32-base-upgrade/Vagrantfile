@@ -1,0 +1,44 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+# vagrant-precise32
+#
+# This is for updating the base precise32 box and repackage
+#
+box       = "precise32"
+box_url   = "http://files.vagrantup.com/precise32.box"
+hostname  = "precise32-upgrade-20140221"
+domain    = "example.com" 
+ip        = "192.168.0.40" # random ip address
+ram       = "256" # adjust as needed
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box       = box
+  config.vm.box_url   = box_url
+  config.vm.host_name = hostname + '.' + domain
+  config.vm.network :private_network, ip: ip
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize [
+      "modifyvm", :id, 
+      "--name", hostname, 
+      "--memory", ram
+    ]
+  end
+
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.auto_detect = true
+    # If you are using VirtualBox, you might want to enable NFS for shared folders
+    #config.cache.enable_nfs  = true
+  end
+
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file  = "site.pp"
+    puppet.module_path    = "puppet/modules"
+  end
+
+end
