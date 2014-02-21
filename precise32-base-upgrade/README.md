@@ -1,4 +1,4 @@
-# Vagrant's Ubuntu Precise32 Base Box Update Build
+# Precise32 Base Box Upgrade
 
 This project will be for building an updated version of the Vagrant's Ubuntu Precise32 (12.04-i686) box. This box is the standard base box with a few additional installed/upgraded packages listed below.
 
